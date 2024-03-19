@@ -1,4 +1,4 @@
-import { WrapAllDiMaris, WrapContent, Photo, Data } from "./style.js";
+import { WrapAllDiMaris, WrapContent, Photo, Data, TopTitle } from "./style.js";
 
 import useWindowSize from "../../helper/usewindowsize.js";
 import Image from "next/image.js";
@@ -13,7 +13,6 @@ import {
   Title,
   WrapText,
 } from "../Hero/style.js";
-import { TopTitle } from "../../HorecaPage/Mapa/style.js";
 import parse from "html-react-parser";
 
 function DiMaris() {

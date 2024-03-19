@@ -8,6 +8,7 @@ import {
   BlueLine,
   Text,
   Data,
+  TopTitle,
 } from "./style.js";
 
 import useWindowSize from "../../helper/usewindowsize";
@@ -19,7 +20,6 @@ import { useRouter } from "next/router.js";
 import parse from "html-react-parser";
 
 import { useState } from "react";
-import { TopTitle } from "../../HorecaPage/Mapa/style.js";
 
 function ContactHero() {
   const { locale } = useRouter();

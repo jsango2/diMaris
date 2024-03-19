@@ -67,3 +67,17 @@ export const Data = styled.div`
     padding: 30px 30px 40px 25px;
   }
 `;
+export const TopTitle = styled.h3`
+  position: relative;
+  z-index: 11;
+  font-family: "Roboto Condensed";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: uppercase;
+  color: #f5faff;
+  margin-bottom: 0;
+  @media only screen and (max-width: 1300px) {
+  }
+`;
