@@ -99,10 +99,19 @@ const Header = ({ siteTitle, novostiNaslovi, oglasiNaslovi }) => {
                       >
                         Marikomerc
                       </Link>
-                      <Link className="navLinkDrop" href="/">
+                      <Link
+                        className="navLinkDrop"
+                        href="https://perlabisermora.hr/"
+                      >
                         {locale === "hr"
                           ? "Perla - Biser Mora"
                           : "Perla - Sea Pearl"}
+                      </Link>
+                      <Link
+                        className="navLinkDrop"
+                        href="https://www.marikomerc.hr/MLS"
+                      >
+                        {locale === "hr" ? "MLS logistika" : "MLS logistics"}
                       </Link>
                     </div>
                     <div
