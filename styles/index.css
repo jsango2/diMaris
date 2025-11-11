@@ -1912,3 +1912,81 @@ select {
     margin-top: 36px;
   }
 }
+
+/* === Popup za kolačiće === */
+.cookie-notice {
+  position: fixed;
+  /* left: 0; */
+  right: 2rem;
+  bottom: 2rem;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
+  z-index: 1000;
+  color: #1c2640;
+  opacity: 0;
+  transform: translateY(8px);
+  will-change: opacity, transform;
+  animation: cookieNoticeIn 420ms ease-out 3s forwards;
+}
+
+.cookie-notice__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 12px 48px;
+  position: relative;
+  text-align: center;
+}
+
+.cookie-notice__text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.cookie-notice__link {
+  color: #4299c8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cookie-notice__close {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  background: none;
+  border: 0;
+  padding: 4px;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: #1c2640;
+}
+
+@media (max-width: 480px) {
+  .cookie-notice__inner {
+    padding: 10px 40px;
+  }
+  .cookie-notice__text {
+    font-size: 13px;
+  }
+}
+
+@keyframes cookieNoticeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cookie-notice {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
