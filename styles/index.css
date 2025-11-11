@@ -10,32 +10,32 @@ body .slick-next::before {
 } */
 
 @font-face {
-  font-family: "Gilroy";
-  src: url("../assets/fonts/gilroy/Gilroy-Regular.ttf");
+  font-family: 'Gilroy';
+  src: url('../assets/fonts/gilroy/Gilroy-Regular.ttf');
   font-weight: normal;
   font-style: normal;
   format: truetype;
   font-display: swap;
 }
 @font-face {
-  font-family: "Gilroy";
-  src: url("../assets/fonts/gilroy/Gilroy-Bold.ttf");
+  font-family: 'Gilroy';
+  src: url('../assets/fonts/gilroy/Gilroy-Bold.ttf');
   font-weight: 700;
   font-style: normal;
   format: truetype;
   font-display: swap;
 }
 @font-face {
-  font-family: "Gilroy";
-  src: url("../assets/fonts/gilroy/Gilroy-ExtraBold.ttf");
+  font-family: 'Gilroy';
+  src: url('../assets/fonts/gilroy/Gilroy-ExtraBold.ttf');
   font-weight: 900;
   font-style: normal;
   format: truetype;
   font-display: swap;
 }
 @font-face {
-  font-family: "Gilroy";
-  src: url("../assets/fonts/gilroy/Gilroy-Medium.ttf");
+  font-family: 'Gilroy';
+  src: url('../assets/fonts/gilroy/Gilroy-Medium.ttf');
   font-weight: 600;
   font-style: normal;
   format: truetype;
@@ -53,18 +53,9 @@ body .slick-next::before {
   --color-charcoal: #37313bff;
   --color-siva: #b0b0b0ff;
   /* --gradient:-marikomerc-radial-plava: ;  */
-  --gradient-gradient-crni-od-dolje: linear-gradient(
-    #00000000 0%,
-    #000000a8 100%
-  );
-  --gradient-gradient-svjetlo-plava: linear-gradient(
-    #338bc2ff 0%,
-    #dffee6ff 100%
-  );
-  --gradient-gradient-linear-gradient-za-posvjetljivanje-od-gore: linear-gradient(
-    #c7c7c72b 0%,
-    #f2f2f200 100%
-  );
+  --gradient-gradient-crni-od-dolje: linear-gradient(#00000000 0%, #000000a8 100%);
+  --gradient-gradient-svjetlo-plava: linear-gradient(#338bc2ff 0%, #dffee6ff 100%);
+  --gradient-gradient-linear-gradient-za-posvjetljivanje-od-gore: linear-gradient(#c7c7c72b 0%, #f2f2f200 100%);
   --color-sunrise-light-charcoal: #403845ff;
   --color-sunrise-text-grey: #605866ff;
   --color-sunrise-grey: #f5faffff;
@@ -87,7 +78,7 @@ body {
 }
 
 html {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -moz-text-size-adjust: none;
   -webkit-text-size-adjust: none;
@@ -236,11 +227,7 @@ p {
   align-items: center;
   margin: 0 auto;
   position: relative;
-  background: radial-gradient(
-    79.54% 79.54% at 1.33% 0%,
-    #253151 0%,
-    #101628 100%
-  );
+  background: radial-gradient(79.54% 79.54% at 1.33% 0%, #253151 0%, #101628 100%);
   padding-left: 0px;
   z-index: 100;
 }
@@ -255,17 +242,13 @@ p {
   align-items: center;
   margin: 0 auto;
   position: relative;
-  background: radial-gradient(
-      79.54% 79.54% at 1.33% 0%,
-      #253151 0%,
-      #101628 100%
-    )
+  background: radial-gradient(79.54% 79.54% at 1.33% 0%, #253151 0%, #101628 100%)
     /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
   padding-left: 15px;
   z-index: 100;
 }
 .navBar a {
-  font-family: "Gilroy";
+  font-family: 'Gilroy';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -341,7 +324,7 @@ p {
 }
 .OnamaDropDown a {
   transition: all ease-in-out 0.5s;
-  font-family: "Gilroy";
+  font-family: 'Gilroy';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -400,7 +383,7 @@ p {
   padding: 0 30px 0 30px;
 }
 .navLink {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   text-decoration: none;
   color: #ffffff;
@@ -417,7 +400,7 @@ p {
   border-radius: 30px;
 }
 header {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: 300;
   font-size: 16px;
@@ -425,7 +408,7 @@ header {
   text-align: center;
   color: #ffffff;
 }
-input[type="date"]::-webkit-calendar-picker-indicator {
+input[type='date']::-webkit-calendar-picker-indicator {
   /* display: none; */
   /* webkit-appearance: none; */
   opacity: 0.3;
@@ -471,7 +454,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   /* border-bottom: none !important; */
 
   /* M-H3 */
-  font-family: "Roboto";
+  font-family: 'Roboto';
   font-size: 18px !important;
   font-style: normal;
   font-weight: 600;
@@ -794,7 +777,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: all 0.3s ease-in-out;
 }
 .menu a {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   text-decoration: none;
   color: #ffffff;
@@ -820,7 +803,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 } */
 
 .linkOnamaClosed::after {
-  content: "";
+  content: '';
   position: relative;
   right: 0;
   top: 50%;
@@ -835,7 +818,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: all 0.6s ease;
 }
 .linkOnamaOpen::after {
-  content: "";
+  content: '';
   position: relative;
   right: 0;
   top: 50%;
@@ -850,7 +833,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: all 0.6s ease;
 }
 .linkGroupClosed::after {
-  content: "";
+  content: '';
   position: relative;
   right: 0;
   top: 50%;
@@ -865,7 +848,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: all 0.6s ease;
 }
 .linkGroupOpen::after {
-  content: "";
+  content: '';
   position: relative;
   right: 0;
   top: 50%;
@@ -915,7 +898,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 20px;
   width: 416px;
   height: 47px;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -933,7 +916,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 20px;
   width: 416px;
   height: 47px;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -1038,7 +1021,7 @@ select {
   -khtml-border-radius: 5px;
   width: 260px;
   height: 47px;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -1063,7 +1046,7 @@ select {
   height: 20px;
 }
 
-.formCalc input[type="submit"] {
+.formCalc input[type='submit'] {
   background: #f9ff00;
   color: #191b26;
   font-weight: 600;
@@ -1452,11 +1435,7 @@ select {
     right: 50%;
     width: 100%;
     /* border-radius: 0 0 39px 39px; */
-    background: radial-gradient(
-      91.99% 72.47% at 62.52% 76.02%,
-      #2b3a63 1.65%,
-      #101628 100%
-    );
+    background: radial-gradient(91.99% 72.47% at 62.52% 76.02%, #2b3a63 1.65%, #101628 100%);
     padding-top: 30px;
     display: grid;
     grid-template-columns: 1fr;
@@ -1825,5 +1804,111 @@ select {
   }
   .nightRunDiv {
     width: 100%;
+  }
+}
+
+/* RUDI */
+
+/* === Legal podstranice === */
+
+.legal {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 20px 160px;
+  line-height: 1.7;
+  color: #0f172a;
+  background: #fff;
+}
+
+.legal__hero {
+  margin: 0 calc(50% - 50vw) 24px;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+.legal__hero img {
+  display: block;
+  width: 100%;
+  height: clamp(320px, 55vh, 700px);
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.legal__header {
+  margin-bottom: 16px;
+  padding-top: 12px;
+}
+
+.legal__title {
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.2;
+  margin: 0 0 6px;
+  color: #1c2640;
+}
+.legal__subtitle {
+  margin: 0 0 12px;
+  font-weight: 600;
+  color: #475569;
+  display: none;
+}
+.legal__intro {
+  margin: 0 0 4px;
+  font-weight: 500;
+}
+.legal__content h2 {
+  font-size: clamp(18px, 2.6vw, 22px);
+  margin: 24px 0 8px;
+  color: #1c2640;
+}
+.legal__content p {
+  margin: 0 0 12px;
+}
+.legal__list {
+  padding-left: 20px;
+  margin: 0 0 12px;
+}
+.legal__list li {
+  margin: 4px 0;
+}
+.legal a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* === Footer legal linkovi === */
+
+.footer-legal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 80px;
+  flex-wrap: wrap;
+}
+
+.footer-legal a {
+  text-decoration: none;
+  color: #f5faff;
+  font-family: Gilroy, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 153%;
+  position: relative;
+  bottom: 0;
+  transition: bottom 0.3s ease-in-out;
+}
+
+.footer-legal a:hover {
+  bottom: 3px;
+}
+
+.footer-legal__sep {
+  color: #b5d3e3;
+  opacity: 0.8;
+}
+
+@media (max-width: 770px) {
+  .footer-legal {
+    margin-top: 36px;
   }
 }
