@@ -37,7 +37,6 @@ function Lokacija({
   });
   const { locale } = useRouter();
   const t = locale === "en" ? en : hr;
-  console.log(lokacija);
   return (
     <WrapLokacija ref={ref} className={` ${inView ? "inView" : "outView"}`}>
       <Photo>

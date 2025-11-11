@@ -117,7 +117,6 @@ function LanguageSwitcher({
                   getTranslationRouteForNews[0].node.id,
                 { locale: "hrv", strict: true }
               );
-        console.log(matchingUrl);
         return router.push(matchingUrl, undefined, { locale: lang });
       }
 
@@ -173,7 +172,6 @@ function LanguageSwitcher({
                     .join("-"),
                 { locale: "hrv", strict: true }
               );
-        console.log(matchingUrl);
         return router.push(matchingUrl, undefined, { locale: lang });
       }
       // pronađi za matchinUrl za Novosti
