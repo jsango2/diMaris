@@ -115,7 +115,7 @@ export const diMarisKontaktData = [
     'ENG - Radno vrijeme 3': '',
     'Google lokacija':
       'https://www.google.com/maps/dir//Šetalište+kneza+Branimira+6,+Biograd+na+Moru/@43.9380551,15.4391489,16z/data=!4m8!4m7!1m0!1m5!1m1!1s0x1334cad065843321:0xb89509fed0877293!2m2!1d15.4442988!2d43.9380552?entry=ttu',
-    'Photo Link': 'http://marikomerc.sutra.hr/wp-content/uploads/2024/01/biograd.png',
+    'Photo Link': 'https://marikomerc.sutra.hr/wp-content/uploads/2025/06/BIOGRAD.jpg',
   },
   {
     'Lokacija ribarnice': 'Di Maris uprava',
