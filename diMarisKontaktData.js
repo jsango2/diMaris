@@ -105,7 +105,7 @@ export const diMarisKontaktData = [
     'Lokacija ribarnice ENG': 'DI Maris Biograd market',
     Ulica: 'Šetalište kneza Branimira 6',
     'Poštanski broj i grad': '23210 Biograd na moru',
-    TEL: '098/996-2240',
+    TEL: '091/799-7779',
     Voditelj: 'Josipa Erlić',
     'Radno vrijeme 1': 'PON - PET 07:00 - 14:00',
     'Radno vrijeme 2': 'SUB 07:00 - 12:00',
