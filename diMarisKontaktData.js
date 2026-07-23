@@ -65,7 +65,7 @@ export const diMarisKontaktData = [
     'ENG - Radno vrijeme 3': '-',
     'Google lokacija':
       'https://www.google.com/maps/dir//Ulica+pod+bedemom+1A,+Zadar/@44.1158208,15.2223333,16z/data=!4m8!4m7!1m0!1m5!1m1!1s0x4761fa6e2369b73d:0xec7b92a24d54f38a!2m2!1d15.2274832!2d44.1158209?entry=ttu',
-    'Photo Link': 'http://marikomerc.sutra.hr/wp-content/uploads/2024/01/Ribarnica1.png',
+    'Photo Link': 'http://marikomerc.sutra.hr/wp-content/uploads/2024/01/Ribarnica2.png',
   },
   {
     'Lokacija ribarnice': 'DI Maris Ribarnica 2',
@@ -82,7 +82,7 @@ export const diMarisKontaktData = [
     'ENG - Radno vrijeme 3': '-',
     'Google lokacija':
       'https://www.google.com/maps/dir//Ulica+pod+bedemom+1A,+Zadar/@44.1158208,15.2223333,16z/data=!4m8!4m7!1m0!1m5!1m1!1s0x4761fa6e2369b73d:0xec7b92a24d54f38a!2m2!1d15.2274832!2d44.1158209?entry=ttu',
-    'Photo Link': 'http://marikomerc.sutra.hr/wp-content/uploads/2024/01/Ribarnica2.png',
+    'Photo Link': 'http://marikomerc.sutra.hr/wp-content/uploads/2024/01/Ribarnica1.png',
   },
   {
     'Lokacija ribarnice': 'DI Maris Vatrogasni',
