@@ -65,7 +65,7 @@ export const diMarisKontaktData = [
     'ENG - Radno vrijeme 3': '-',
     'Google lokacija':
       'https://www.google.com/maps/dir//Ulica+pod+bedemom+1A,+Zadar/@44.1158208,15.2223333,16z/data=!4m8!4m7!1m0!1m5!1m1!1s0x4761fa6e2369b73d:0xec7b92a24d54f38a!2m2!1d15.2274832!2d44.1158209?entry=ttu',
-    'Photo Link': 'http://marikomerc.sutra.hr/wp-content/uploads/2024/01/Ribarnica1.png',
+    'Photo Link': 'http://marikomerc.sutra.hr/wp-content/uploads/2024/01/Ribarnica2.png',
   },
   {
     'Lokacija ribarnice': 'DI Maris Ribarnica 2',
@@ -82,7 +82,7 @@ export const diMarisKontaktData = [
     'ENG - Radno vrijeme 3': '-',
     'Google lokacija':
       'https://www.google.com/maps/dir//Ulica+pod+bedemom+1A,+Zadar/@44.1158208,15.2223333,16z/data=!4m8!4m7!1m0!1m5!1m1!1s0x4761fa6e2369b73d:0xec7b92a24d54f38a!2m2!1d15.2274832!2d44.1158209?entry=ttu',
-    'Photo Link': 'http://marikomerc.sutra.hr/wp-content/uploads/2024/01/Ribarnica2.png',
+    'Photo Link': 'http://marikomerc.sutra.hr/wp-content/uploads/2024/01/Ribarnica1.png',
   },
   {
     'Lokacija ribarnice': 'DI Maris Vatrogasni',
@@ -105,7 +105,7 @@ export const diMarisKontaktData = [
     'Lokacija ribarnice ENG': 'DI Maris Biograd market',
     Ulica: 'Šetalište kneza Branimira 6',
     'Poštanski broj i grad': '23210 Biograd na moru',
-    TEL: '098/996-2240',
+    TEL: '091/799-7779',
     Voditelj: 'Josipa Erlić',
     'Radno vrijeme 1': 'PON - PET 07:00 - 14:00',
     'Radno vrijeme 2': 'SUB 07:00 - 12:00',
@@ -115,7 +115,7 @@ export const diMarisKontaktData = [
     'ENG - Radno vrijeme 3': '',
     'Google lokacija':
       'https://www.google.com/maps/dir//Šetalište+kneza+Branimira+6,+Biograd+na+Moru/@43.9380551,15.4391489,16z/data=!4m8!4m7!1m0!1m5!1m1!1s0x1334cad065843321:0xb89509fed0877293!2m2!1d15.4442988!2d43.9380552?entry=ttu',
-    'Photo Link': 'http://marikomerc.sutra.hr/wp-content/uploads/2024/01/biograd.png',
+    'Photo Link': 'https://marikomerc.sutra.hr/wp-content/uploads/2025/06/BIOGRAD.jpg',
   },
   {
     'Lokacija ribarnice': 'Di Maris uprava',
