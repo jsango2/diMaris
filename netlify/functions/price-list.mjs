@@ -1,4 +1,4 @@
-import { readArchiveCsv, readCurrentCsv } from "../lib/pricelist.mjs";
+import { readArchiveCsv, readCurrentCsv, readPublicCsv } from "../lib/pricelist.mjs";
 
 const CSV_HEADERS = {
   "Content-Type": "text/csv; charset=utf-8",
@@ -22,6 +22,8 @@ export default async function handler(request) {
   } else if (relativePath.startsWith("arhiva/")) {
     const filename = relativePath.slice("arhiva/".length);
     csv = await readArchiveCsv(filename);
+  } else if (/^[a-zA-Z0-9][a-zA-Z0-9._+-]*\.csv$/.test(relativePath)) {
+    csv = await readPublicCsv(relativePath);
   }
 
   if (!csv) {

@@ -3,6 +3,11 @@
   node_bundler = "esbuild"
 
 [[redirects]]
+  from = "/cjenici/upload"
+  to = "/.netlify/functions/upload-pricelist"
+  status = 200
+
+[[redirects]]
   from = "/cjenici/*"
   to = "/.netlify/functions/price-list/:splat"
   status = 200
