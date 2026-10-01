@@ -167,12 +167,18 @@ export function buildVenioUrl(env = process.env, date = getZagrebDate()) {
 export async function fetchVenioItems(env = process.env, date = getZagrebDate()) {
   const url = buildVenioUrl(env, date);
   const auth = Buffer.from(`${env.VENIO_API_USERNAME}:${env.VENIO_API_PASSWORD}`, "utf8").toString("base64");
-  const response = await fetch(url, {
-    headers: {
-      Accept: "application/json",
-      Authorization: `Basic ${auth}`,
-    },
-  });
+  let response;
+
+  try {
+    response = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Basic ${auth}`,
+      },
+    });
+  } catch (error) {
+    throw new Error(`VENIO API request failed for ${safeUrlForLogs(url)}: ${formatFetchError(error)}`);
+  }
 
   if (!response.ok) {
     throw new Error(`VENIO API returned HTTP ${response.status}.`);
@@ -184,6 +190,28 @@ export async function fetchVenioItems(env = process.env, date = getZagrebDate())
   }
 
   return extractItems(await response.json(), env.VENIO_ITEMS_PATH);
+}
+
+function safeUrlForLogs(url) {
+  const safeUrl = new URL(url.toString());
+  safeUrl.username = "";
+  safeUrl.password = "";
+  return safeUrl.toString();
+}
+
+function formatFetchError(error) {
+  if (!(error instanceof Error)) {
+    return String(error);
+  }
+
+  const cause = error.cause;
+  if (cause && typeof cause === "object") {
+    const code = "code" in cause ? cause.code : "";
+    const message = "message" in cause ? cause.message : "";
+    return [error.message, code, message].filter(Boolean).join(" - ");
+  }
+
+  return error.message;
 }
 
 export function extractItems(payload, configuredPath) {
