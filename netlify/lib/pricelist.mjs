@@ -21,12 +21,12 @@ const ARCHIVE_PREFIX = "archive/";
 const RETENTION_DAYS = 30;
 
 const DEFAULT_ALLOWED_FILENAME_PATTERNS = [
-  /^PRODAVAONICA_Miroslava_Krleze_1c_23000_Zadar_T004_000006_\d{8}_\d{6}\.csv$/,
-  /^PRODAVAONICA_Pod_bedemom_1a_23000_Zadar_T001_000006_\d{8}_\d{6}\.csv$/,
-  /^PRODAVAONICA_Pod_bedemom_1a_23000_Zadar_T005_000006_\d{8}_\d{6}\.csv$/,
-  /^PRODAVAONICA_Polacisce_2_23000_Zadar_T002_000006_\d{8}_\d{6}\.csv$/,
-  /^PRODAVAONICA_Put_Murvice_20_23000_Zadar_T009_000006_\d{8}_\d{6}\.csv$/,
-  /^PRODAVAONICA_Setaliste_kneza_Branimira_6_23210_Biograd_na_moru_T006_000006_\d{8}_\d{6}\.csv$/,
+  /^PRODAVAONICA_Miroslava_Krleze_1c_23000_Zadar_T004_\d+_\d{8}_\d{6}\.csv$/,
+  /^PRODAVAONICA_Pod_bedemom_1a_23000_Zadar_T001_\d+_\d{8}_\d{6}\.csv$/,
+  /^PRODAVAONICA_Pod_bedemom_1a_23000_Zadar_T005_\d+_\d{8}_\d{6}\.csv$/,
+  /^PRODAVAONICA_Polacisce_2_23000_Zadar_T002_\d+_\d{8}_\d{6}\.csv$/,
+  /^PRODAVAONICA_Put_Murvice_20_23000_Zadar_T009_\d+_\d{8}_\d{6}\.csv$/,
+  /^PRODAVAONICA_Setaliste_kneza_Branimira_6_23210_Biograd_na_moru_T006_\d+_\d{8}_\d{6}\.csv$/,
 ];
 
 export function getZagrebTimestamp(date = new Date()) {
