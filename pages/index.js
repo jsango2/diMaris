@@ -4,6 +4,7 @@ import Hero from '../components/diMarisPage/hero/hero';
 import Content1 from '../components/diMarisPage/content1/content1';
 import Instagram from '../components/diMarisPage/instagram/instagram';
 import Lokacije from '../components/diMarisPage/lokacije/lokacije';
+import Cjenik from '../components/diMarisPage/cjenik/cjenik';
 import Content2 from '../components/diMarisPage/content1/content2';
 import CookieNotice from '../components/rudiKomponente/CookieNotice';
 
@@ -15,6 +16,7 @@ function index() {
       <Content2 />
       <Instagram />
       <Lokacije />
+      <Cjenik />
       <CookieNotice />
     </Layout>
   );

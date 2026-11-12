@@ -247,3 +247,131 @@ export async function cleanupOldArchives(now = new Date()) {
 
   return { deleted };
 }
+
+// Poslovnice čiji se cjenici prikazuju na stranici (oznaka iz naziva CSV datoteke).
+export const STORES = [
+  { code: "T002", name: "DI Maris City Galleria", address: "Polačišće 2, Zadar" },
+  { code: "T004", name: "DI Maris Maraska park", address: "Miroslava Krleže 1c, Zadar" },
+  { code: "T001", name: "DI Maris Pod bedemom (T001)", address: "Pod bedemom 1a, Zadar" },
+  { code: "T005", name: "DI Maris Pod bedemom (T005)", address: "Pod bedemom 1a, Zadar" },
+  { code: "T009", name: "DI Maris Vatrogasni", address: "Put Murvice 20, Zadar" },
+  { code: "T006", name: "DI Maris Biograd tržnica", address: "Šetalište kneza Branimira 6, Biograd na moru" },
+];
+
+const PRICELIST_FILENAME_RE = /^PRODAVAONICA_.+_(T\d{3})_(\d+)_(\d{8})_(\d{6})\.csv$/;
+
+function compactToIso(date, time) {
+  // "20261024", "063233" -> "2026-10-24T06:32:33" (lokalno vrijeme Zagreb)
+  return `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}T${time.slice(0, 2)}:${time.slice(2, 4)}:${time.slice(4, 6)}`;
+}
+
+function zagrebStampToIso(stamp) {
+  // "20261019T130714+0200" -> "2026-10-19T13:07:14+02:00"
+  const match = /^(\d{8})T(\d{6})([+-])(\d{2})(\d{2})$/.exec(stamp);
+  if (!match) {
+    return null;
+  }
+  return `${compactToIso(match[1], match[2])}${match[3]}${match[4]}:${match[5]}`;
+}
+
+export function parsePriceListFilename(filename) {
+  const match = PRICELIST_FILENAME_RE.exec(filename);
+  if (!match) {
+    return null;
+  }
+  return {
+    storeCode: match[1],
+    sequence: Number(match[2]),
+    exportedAt: compactToIso(match[3], match[4]),
+  };
+}
+
+// archive/<javni_naziv bez .csv>_<YYYYMMDDTHHMMSS+HHMM>.csv
+export function parseArchiveFilename(archiveFilename) {
+  const match = /^(.+)_(\d{8}T\d{6}[+-]\d{4})\.csv$/.exec(archiveFilename);
+  if (!match) {
+    return null;
+  }
+  const publicFilename = `${match[1]}.csv`;
+  const parsed = parsePriceListFilename(publicFilename);
+  if (!parsed) {
+    return null;
+  }
+  return { ...parsed, publicFilename, publishedAt: zagrebStampToIso(match[2]) };
+}
+
+async function listKeys(store, prefix) {
+  const keys = [];
+  for await (const result of store.list({ prefix, paginate: true })) {
+    for (const blob of result.blobs) {
+      keys.push(blob.key.slice(prefix.length));
+    }
+  }
+  return keys;
+}
+
+// Gradi popis po poslovnici: zadnji cjenik + arhiva (najnoviji prvi, najviše RETENTION_DAYS dana).
+export function buildPriceListIndex({ publicFilenames, archiveFilenames, now = new Date() }) {
+  const cutoff = now.getTime() - RETENTION_DAYS * 24 * 60 * 60 * 1000;
+  const byStore = new Map(STORES.map((store) => [store.code, new Map()]));
+
+  for (const archiveFilename of archiveFilenames) {
+    const parsed = parseArchiveFilename(archiveFilename);
+    if (!parsed || !byStore.has(parsed.storeCode)) {
+      continue;
+    }
+    const entries = byStore.get(parsed.storeCode);
+    const existing = entries.get(parsed.publicFilename);
+    // Ako je ista datoteka poslana više puta, vrijedi zadnje slanje.
+    if (!existing || String(parsed.publishedAt) > String(existing.publishedAt)) {
+      entries.set(parsed.publicFilename, {
+        filename: parsed.publicFilename,
+        sequence: parsed.sequence,
+        exportedAt: parsed.exportedAt,
+        publishedAt: parsed.publishedAt,
+        url: `/cjenici/arhiva/${encodeURIComponent(archiveFilename)}`,
+        publicUrl: `/cjenici/${encodeURIComponent(parsed.publicFilename)}`,
+      });
+    }
+  }
+
+  // Javne datoteke koje (više) nemaju zapis u arhivi.
+  for (const publicFilename of publicFilenames) {
+    const parsed = parsePriceListFilename(publicFilename);
+    if (!parsed || !byStore.has(parsed.storeCode)) {
+      continue;
+    }
+    const entries = byStore.get(parsed.storeCode);
+    if (!entries.has(publicFilename)) {
+      entries.set(publicFilename, {
+        filename: publicFilename,
+        sequence: parsed.sequence,
+        exportedAt: parsed.exportedAt,
+        publishedAt: null,
+        url: `/cjenici/${encodeURIComponent(publicFilename)}`,
+        publicUrl: `/cjenici/${encodeURIComponent(publicFilename)}`,
+      });
+    }
+  }
+
+  return STORES.map((store) => {
+    const all = [...byStore.get(store.code).values()].sort(
+      (a, b) => b.exportedAt.localeCompare(a.exportedAt) || b.sequence - a.sequence
+    );
+    const archive = all.filter((entry) => Date.parse(`${entry.exportedAt}Z`) >= cutoff - 24 * 60 * 60 * 1000);
+    return {
+      ...store,
+      latest: all[0] || null,
+      archive,
+    };
+  });
+}
+
+export async function listPriceLists(now = new Date()) {
+  const store = getPriceListStore();
+  const [publicFilenames, archiveFilenames] = await Promise.all([
+    listKeys(store, PUBLIC_PREFIX),
+    listKeys(store, ARCHIVE_PREFIX),
+  ]);
+  return buildPriceListIndex({ publicFilenames, archiveFilenames, now });
+}

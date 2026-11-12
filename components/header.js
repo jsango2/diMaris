@@ -88,6 +88,12 @@ const Header = ({ siteTitle, novostiNaslovi, oglasiNaslovi }) => {
                     </Link>
                   </div>
                   <div className="navLink borderNav"></div>
+                  <div>
+                    <Link className="navLink" href="/#cjenik">
+                      {locale === "hr" ? "Cjenik" : "Price list"}
+                    </Link>
+                  </div>
+                  <div className="navLink borderNav"></div>
                   <div className="dropdown">
                     <div className="dropdown-content">
                       {/* <Link className="navLinkDrop" href="/MLS">

@@ -49,6 +49,11 @@ const MeniMobile = ({
     <>
       <div className={`menu ${isOpen ? "openMenu" : "closedMenu"}`}>
         <WrapBlock>
+          <Link href="/#cjenik">
+            <a onClick={closeMenu}>
+              {locale === "hr" ? "Cjenik" : "Price list"}
+            </a>
+          </Link>
           <Link className="mobileLinks" href="/proizvodi">
             {locale === "hr" ? "Proizvodi" : "Products"}
           </Link>
