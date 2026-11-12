@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const WrapAll = styled.section`
   box-sizing: border-box;
@@ -41,6 +41,19 @@ export const Poslovnice = styled.div`
   justify-content: center;
   gap: 10px;
   margin-bottom: 30px;
+  @media only screen and (max-width: 750px) {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    margin: 0 -16px 20px -16px;
+    padding: 0 16px 6px 16px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    & > button {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+    }
+  }
 `;
 
 export const PoslovnicaButton = styled.button`
@@ -137,6 +150,9 @@ export const DownloadButton = styled.a`
 `;
 
 export const TableWrap = styled.div`
+  @media only screen and (max-width: 750px) {
+    display: none;
+  }
   width: 100%;
   max-height: 600px;
   overflow: auto;
@@ -188,4 +204,174 @@ export const Poruka = styled.p`
   text-align: center;
   font-size: 16px;
   padding: 30px 0;
+`;
+
+export const Filteri = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+`;
+
+export const Checkbox = styled.label`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: #4299c8;
+    cursor: pointer;
+  }
+`;
+
+export const Broj = styled.div`
+  font-size: 13px;
+  opacity: 0.75;
+`;
+
+export const Oznaka = styled.span`
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+  background: ${(p) => (p.$akcija ? "#fdecd2" : p.$nedostupno ? "#eef1f5" : "#e2f3ea")};
+  color: ${(p) => (p.$akcija ? "#8a4b00" : p.$nedostupno ? "#5b6577" : "#1d6b3f")};
+`;
+
+export const Kartice = styled.div`
+  display: none;
+  @media only screen and (max-width: 750px) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+`;
+
+export const Kartica = styled.div`
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  padding: 14px;
+  background: #fff;
+  opacity: ${(p) => (p.$nedostupno ? 0.7 : 1)};
+  .vrh {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .naziv {
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.3;
+  }
+  .marka {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+  .sidrena {
+    text-align: right;
+    font-weight: 700;
+    font-size: 18px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    span {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      opacity: 0.7;
+    }
+  }
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    margin: 10px 0 0 0;
+    font-size: 13px;
+    div {
+      display: flex;
+      gap: 6px;
+    }
+    dt {
+      opacity: 0.7;
+    }
+    dd {
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+  .oznake {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+`;
+
+const vrtnja = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const puls = keyframes`
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+`;
+
+export const Loader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 30px 0;
+  font-size: 15px;
+  color: #1c2640;
+  &::before {
+    content: "";
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 3px solid #d6e7f2;
+    border-top-color: #4299c8;
+    animation: ${vrtnja} 0.8s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      animation-duration: 2.4s;
+    }
+  }
+`;
+
+export const Kostur = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+  div {
+    height: 38px;
+    border-radius: 6px;
+    background: #eef1f5;
+    animation: ${puls} 1.4s ease-in-out infinite;
+  }
+  div:nth-child(1) {
+    background: #dfe5ee;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    div {
+      animation: none;
+    }
+  }
 `;

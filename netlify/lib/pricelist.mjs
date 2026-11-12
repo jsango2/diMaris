@@ -287,17 +287,26 @@ export function parsePriceListFilename(filename) {
 }
 
 // archive/<javni_naziv bez .csv>_<YYYYMMDDTHHMMSS+HHMM>.csv
+// Netlify Blobs u ključu sprema "+" kao razmak ("..._20261112T063317 0100.csv"),
+// pa prihvaćamo oba oblika. Čitanje preko /cjenici/arhiva/ radi s "+" (%2B).
 export function parseArchiveFilename(archiveFilename) {
-  const match = /^(.+)_(\d{8}T\d{6}[+-]\d{4})\.csv$/.exec(archiveFilename);
+  const match = /^(.+)_(\d{8}T\d{6})([+\- ])(\d{4})\.csv$/.exec(archiveFilename);
   if (!match) {
     return null;
   }
-  const publicFilename = `${match[1]}.csv`;
+  const [, base, stamp, rawSign, offset] = match;
+  const zagrebStamp = `${stamp}${rawSign === "-" ? "-" : "+"}${offset}`;
+  const publicFilename = `${base}.csv`;
   const parsed = parsePriceListFilename(publicFilename);
   if (!parsed) {
     return null;
   }
-  return { ...parsed, publicFilename, publishedAt: zagrebStampToIso(match[2]) };
+  return {
+    ...parsed,
+    publicFilename,
+    urlFilename: `${base}_${zagrebStamp}.csv`,
+    publishedAt: zagrebStampToIso(zagrebStamp),
+  };
 }
 
 async function listKeys(store, prefix) {
@@ -329,7 +338,7 @@ export function buildPriceListIndex({ publicFilenames, archiveFilenames, now = n
         sequence: parsed.sequence,
         exportedAt: parsed.exportedAt,
         publishedAt: parsed.publishedAt,
-        url: `/cjenici/arhiva/${encodeURIComponent(archiveFilename)}`,
+        url: `/cjenici/arhiva/${encodeURIComponent(parsed.urlFilename)}`,
         publicUrl: `/cjenici/${encodeURIComponent(parsed.publicFilename)}`,
       });
     }

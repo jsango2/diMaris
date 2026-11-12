@@ -14,6 +14,14 @@ import {
   Table,
   Napomena,
   Poruka,
+  Filteri,
+  Checkbox,
+  Broj,
+  Kartice,
+  Kartica,
+  Oznaka,
+  Loader,
+  Kostur,
 } from "./style.js";
 
 const TEXT = {
@@ -30,7 +38,10 @@ const TEXT = {
     pretraga: "Pretraži proizvod",
     preuzmi: "Preuzmi CSV",
     nemaRezultata: "Nema proizvoda koji odgovaraju pretrazi.",
-    napomena: "Cijene su izražene u eurima (€).",
+    napomena: "Cijene su izražene u eurima (€). Preuzeti CSV sadrži sve proizvode, uključujući nedostupne.",
+    samoDostupni: "Prikaži samo dostupne proizvode",
+    prikazano: (n, ukupno) => `Prikazano ${n} od ${ukupno} proizvoda`,
+    akcija: "Akcija",
     stupci: {
       naziv: "Naziv",
       marka: "Marka",
@@ -57,7 +68,10 @@ const TEXT = {
     pretraga: "Search products",
     preuzmi: "Download CSV",
     nemaRezultata: "No products match your search.",
-    napomena: "Prices are in euro (€).",
+    napomena: "Prices are in euro (€). The downloaded CSV contains all products, including unavailable ones.",
+    samoDostupni: "Show available products only",
+    prikazano: (n, ukupno) => `Showing ${n} of ${ukupno} products`,
+    akcija: "Offer",
     stupci: {
       naziv: "Name",
       marka: "Brand",
@@ -164,6 +178,7 @@ function Cjenik() {
   const [rows, setRows] = useState(null);
   const [rowsError, setRowsError] = useState(false);
   const [query, setQuery] = useState("");
+  const [samoDostupni, setSamoDostupni] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -176,7 +191,11 @@ function Cjenik() {
         if (cancelled) return;
         const list = Array.isArray(data?.stores) ? data.stores : [];
         setStores(list);
-        const first = list.find((store) => store.latest) || list[0];
+        const fromUrl = new URLSearchParams(window.location.search).get("poslovnica");
+        const first =
+          list.find((store) => store.code === fromUrl) ||
+          list.find((store) => store.latest) ||
+          list[0];
         if (first) setStoreCode(first.code);
       })
       .catch(() => {
@@ -208,6 +227,19 @@ function Cjenik() {
     setQuery("");
   }, [storeCode]);
 
+  // Odabrana poslovnica ostaje u adresi (?poslovnica=T004) pa se link može poslati dalje.
+  const chooseStore = (code) => {
+    setStoreCode(code);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set("poslovnica", code);
+      url.hash = "cjenik";
+      window.history.replaceState(window.history.state, "", url.toString());
+    } catch (error) {
+      // adresa se ne mora ažurirati
+    }
+  };
+
   useEffect(() => {
     if (!selected) {
       setRows(null);
@@ -235,14 +267,16 @@ function Cjenik() {
   const filteredRows = useMemo(() => {
     if (!rows) return [];
     const needle = query.trim().toLocaleLowerCase("hr");
-    if (!needle) return rows;
-    return rows.filter((row) =>
-      [row.naziv, row.marka, row.sifra, row.barkod]
-        .join(" ")
-        .toLocaleLowerCase("hr")
-        .includes(needle)
+    return rows.filter(
+      (row) =>
+        (!samoDostupni || row.dostupnost !== "NEDOSTUPNO") &&
+        (!needle ||
+          [row.naziv, row.marka, row.sifra, row.barkod]
+            .join(" ")
+            .toLocaleLowerCase("hr")
+            .includes(needle))
     );
-  }, [rows, query]);
+  }, [rows, query, samoDostupni]);
 
   const downloadName = selected?.filename || "cjenik.csv";
   const downloadHref = selected ? (isLatest ? selected.publicUrl : selected.url) : null;
@@ -253,7 +287,11 @@ function Cjenik() {
       <Naslov>{t.naslov}</Naslov>
 
       {indexError && <Poruka>{t.greska}</Poruka>}
-      {!indexError && !stores && <Poruka>{t.ucitavanje}</Poruka>}
+      {!indexError && !stores && (
+        <Loader role="status" aria-live="polite">
+          {t.ucitavanje}
+        </Loader>
+      )}
 
       {stores && (
         <>
@@ -265,7 +303,7 @@ function Cjenik() {
                 role="tab"
                 aria-selected={item.code === storeCode}
                 $active={item.code === storeCode}
-                onClick={() => setStoreCode(item.code)}
+                onClick={() => chooseStore(item.code)}
               >
                 {item.name}
                 <span>{item.address}</span>
@@ -324,9 +362,31 @@ function Cjenik() {
               </Info>
 
               {rowsError && <Poruka>{t.greska}</Poruka>}
-              {!rowsError && !rows && <Poruka>{t.ucitavanje}</Poruka>}
+              {!rowsError && !rows && (
+                <>
+                  <Loader role="status" aria-live="polite">
+                    {t.ucitavanje}
+                  </Loader>
+                  <Kostur aria-hidden="true">
+                    {Array.from({ length: 8 }, (_, index) => (
+                      <div key={index} />
+                    ))}
+                  </Kostur>
+                </>
+              )}
               {!rowsError && rows && (
                 <>
+                  <Filteri>
+                    <Checkbox>
+                      <input
+                        type="checkbox"
+                        checked={samoDostupni}
+                        onChange={(event) => setSamoDostupni(event.target.checked)}
+                      />
+                      {t.samoDostupni}
+                    </Checkbox>
+                    <Broj aria-live="polite">{t.prikazano(filteredRows.length, rows.length)}</Broj>
+                  </Filteri>
                   <TableWrap>
                     <Table>
                       <thead>
@@ -350,18 +410,62 @@ function Cjenik() {
                             <td className="num">{formatPrice(row.cijena_za_jedinicu_mjere, locale)}</td>
                             <td className="num">{formatPrice(row.maloprodajna_cijena, locale)}</td>
                             <td>
-                              {row.posebni_oblik_prodaje === "DA"
-                                ? row.naziv_posebnog_oblika_prodaje || "DA"
-                                : ""}
+                              {row.posebni_oblik_prodaje === "DA" && (
+                                <Oznaka $akcija>{row.naziv_posebnog_oblika_prodaje || t.akcija}</Oznaka>
+                              )}
                             </td>
                             <td className="num sidrena">{formatPrice(row.sidrena_cijena, locale)}</td>
-                            <td>{t.dostupno[row.dostupnost] || row.dostupnost}</td>
+                            <td>
+                              <Oznaka $nedostupno={row.dostupnost === "NEDOSTUPNO"}>
+                                {t.dostupno[row.dostupnost] || row.dostupnost}
+                              </Oznaka>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </Table>
                     {filteredRows.length === 0 && <Poruka>{t.nemaRezultata}</Poruka>}
                   </TableWrap>
+                  <Kartice>
+                    {filteredRows.map((row, index) => {
+                      const akcija = row.posebni_oblik_prodaje === "DA";
+                      return (
+                        <Kartica key={`${row.sifra}-${index}`} $nedostupno={row.dostupnost === "NEDOSTUPNO"}>
+                          <div className="vrh">
+                            <div>
+                              <div className="naziv">{row.naziv}</div>
+                              {row.marka && <div className="marka">{row.marka}</div>}
+                            </div>
+                            <div className="sidrena">
+                              <span>{t.stupci.sidrena}</span>
+                              {formatPrice(row.sidrena_cijena, locale)}
+                            </div>
+                          </div>
+                          <dl>
+                            <div>
+                              <dt>{t.stupci.mpc}</dt>
+                              <dd>{formatPrice(row.maloprodajna_cijena, locale)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t.stupci.cijenaJm}</dt>
+                              <dd>
+                                {formatPrice(row.cijena_za_jedinicu_mjere, locale)} / {row.jedinica_mjere}
+                              </dd>
+                            </div>
+                          </dl>
+                          <div className="oznake">
+                            {akcija && (
+                              <Oznaka $akcija>{row.naziv_posebnog_oblika_prodaje || t.akcija}</Oznaka>
+                            )}
+                            <Oznaka $nedostupno={row.dostupnost === "NEDOSTUPNO"}>
+                              {t.dostupno[row.dostupnost] || row.dostupnost}
+                            </Oznaka>
+                          </div>
+                        </Kartica>
+                      );
+                    })}
+                    {filteredRows.length === 0 && <Poruka>{t.nemaRezultata}</Poruka>}
+                  </Kartice>
                   <Napomena>{t.napomena}</Napomena>
                 </>
               )}
