@@ -15,6 +15,27 @@ export const CSV_HEADER = [
   "dostupnost",
 ];
 
+// Novi oblik po Pravilniku o načinu objave cjenika (NN 132/2026), separator ";".
+export const CSV_HEADER_2026 = [
+  "naziv",
+  "sifra",
+  "marka",
+  "neto_kolicina",
+  "jedinica_mjere",
+  "maloprodajna_cijena",
+  "posebni_oblik_prodaje",
+  "cijena_za_jedinicu_mjere",
+  "barkod",
+  "ean_barkod",
+  "bazna_cijena",
+];
+
+// Prihvaćamo oba oblika dok diMaris ne prijeđe u potpunosti na novi.
+const CSV_FORMATS = [
+  { header: CSV_HEADER, separator: "," },
+  { header: CSV_HEADER_2026, separator: ";" },
+];
+
 const STORE_NAME = "dimaris-price-lists";
 const PUBLIC_PREFIX = "public/";
 const ARCHIVE_PREFIX = "archive/";
@@ -27,6 +48,13 @@ const DEFAULT_ALLOWED_FILENAME_PATTERNS = [
   /^PRODAVAONICA_Polacisce_2_23000_Zadar_T002_\d+_\d{8}_\d{6}\.csv$/,
   /^PRODAVAONICA_Put_Murvice_20_23000_Zadar_T009_\d+_\d{8}_\d{6}\.csv$/,
   /^PRODAVAONICA_Setaliste_kneza_Branimira_6_23210_Biograd_na_moru_T006_\d+_\d{8}_\d{6}\.csv$/,
+  // NN 132/2026: OIB na početku i oznaka "ROBA" prije broja pohrane.
+  /^75080321648_PRODAVAONICA_Miroslava_Krleze_1c_23000_Zadar_T004_ROBA_\d+_\d{8}_\d{6}\.csv$/,
+  /^75080321648_PRODAVAONICA_Pod_bedemom_1a_23000_Zadar_T001_ROBA_\d+_\d{8}_\d{6}\.csv$/,
+  /^75080321648_PRODAVAONICA_Pod_bedemom_1a_23000_Zadar_T005_ROBA_\d+_\d{8}_\d{6}\.csv$/,
+  /^75080321648_PRODAVAONICA_Polacisce_2_23000_Zadar_T002_ROBA_\d+_\d{8}_\d{6}\.csv$/,
+  /^75080321648_PRODAVAONICA_Put_Murvice_20_23000_Zadar_T009_ROBA_\d+_\d{8}_\d{6}\.csv$/,
+  /^75080321648_PRODAVAONICA_Setaliste_kneza_Branimira_6_23210_Biograd_na_moru_T006_ROBA_\d+_\d{8}_\d{6}\.csv$/,
 ];
 
 export function getZagrebTimestamp(date = new Date()) {
@@ -120,9 +148,14 @@ export function validateUploadedCsv(csv) {
     throw new Error("CSV must contain a header and at least one data row.");
   }
 
-  const header = parseCsvLine(lines[0]);
-  if (header.join(",") !== CSV_HEADER.join(",")) {
-    throw new Error(`Invalid CSV header. Expected: ${CSV_HEADER.join(",")}`);
+  // Separator određuje zaglavlje: staro (",") ili novo po NN 132/2026 (";").
+  const format = CSV_FORMATS.find(
+    ({ header, separator }) => parseCsvLine(lines[0], separator).join(separator) === header.join(separator)
+  );
+  if (!format) {
+    throw new Error(
+      `Invalid CSV header. Expected one of: ${CSV_FORMATS.map(({ header, separator }) => header.join(separator)).join(" | ")}`
+    );
   }
 
   for (let index = 1; index < lines.length; index += 1) {
@@ -130,16 +163,16 @@ export function validateUploadedCsv(csv) {
       continue;
     }
 
-    const columns = parseCsvLine(lines[index]);
-    if (columns.length !== CSV_HEADER.length) {
-      throw new Error(`CSV row ${index + 1} has ${columns.length} columns, expected ${CSV_HEADER.length}.`);
+    const columns = parseCsvLine(lines[index], format.separator);
+    if (columns.length !== format.header.length) {
+      throw new Error(`CSV row ${index + 1} has ${columns.length} columns, expected ${format.header.length}.`);
     }
   }
 
   return `${normalizedCsv.replace(/\n*$/, "")}\n`;
 }
 
-function parseCsvLine(line) {
+function parseCsvLine(line, separator = ",") {
   const columns = [];
   let current = "";
   let quoted = false;
@@ -159,7 +192,7 @@ function parseCsvLine(line) {
       continue;
     }
 
-    if (char === "," && !quoted) {
+    if (char === separator && !quoted) {
       columns.push(current);
       current = "";
       continue;
@@ -258,7 +291,9 @@ export const STORES = [
   { code: "T006", name: "DI Maris Biograd tržnica", address: "Šetalište kneza Branimira 6, Biograd na moru" },
 ];
 
-const PRICELIST_FILENAME_RE = /^PRODAVAONICA_.+_(T\d{3})_(\d+)_(\d{8})_(\d{6})\.csv$/;
+// Stari oblik: PRODAVAONICA_<adresa>_T00x_<broj>_<YYYYMMDD>_<HHMMSS>.csv
+// Novi (NN 132/2026): <OIB>_PRODAVAONICA_<adresa>_T00x_ROBA_<broj>_<YYYYMMDD>_<HHMMSS>.csv
+const PRICELIST_FILENAME_RE = /^(?:\d{11}_)?PRODAVAONICA_.+_(T\d{3})_(?:ROBA_)?(\d+)_(\d{8})_(\d{6})\.csv$/;
 
 function compactToIso(date, time) {
   // "20261024", "063233" -> "2026-10-24T06:32:33" (lokalno vrijeme Zagreb)
