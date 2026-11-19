@@ -49,12 +49,12 @@ const DEFAULT_ALLOWED_FILENAME_PATTERNS = [
   /^PRODAVAONICA_Put_Murvice_20_23000_Zadar_T009_\d+_\d{8}_\d{6}\.csv$/,
   /^PRODAVAONICA_Setaliste_kneza_Branimira_6_23210_Biograd_na_moru_T006_\d+_\d{8}_\d{6}\.csv$/,
   // NN 132/2026: OIB na početku i oznaka "ROBA" prije broja pohrane.
-  /^75080321648_PRODAVAONICA_Miroslava_Krleze_1c_23000_Zadar_T004_ROBA_\d+_\d{8}_\d{6}\.csv$/,
-  /^75080321648_PRODAVAONICA_Pod_bedemom_1a_23000_Zadar_T001_ROBA_\d+_\d{8}_\d{6}\.csv$/,
-  /^75080321648_PRODAVAONICA_Pod_bedemom_1a_23000_Zadar_T005_ROBA_\d+_\d{8}_\d{6}\.csv$/,
-  /^75080321648_PRODAVAONICA_Polacisce_2_23000_Zadar_T002_ROBA_\d+_\d{8}_\d{6}\.csv$/,
-  /^75080321648_PRODAVAONICA_Put_Murvice_20_23000_Zadar_T009_ROBA_\d+_\d{8}_\d{6}\.csv$/,
-  /^75080321648_PRODAVAONICA_Setaliste_kneza_Branimira_6_23210_Biograd_na_moru_T006_ROBA_\d+_\d{8}_\d{6}\.csv$/,
+  /^75080321648_PRODAVAONICA_Miroslava_Krleze_1c_23000_Zadar_T004_ROBA_\d+_\d{8}_\d{4}(?:\d{2})?\.csv$/,
+  /^75080321648_PRODAVAONICA_Pod_bedemom_1a_23000_Zadar_T001_ROBA_\d+_\d{8}_\d{4}(?:\d{2})?\.csv$/,
+  /^75080321648_PRODAVAONICA_Pod_bedemom_1a_23000_Zadar_T005_ROBA_\d+_\d{8}_\d{4}(?:\d{2})?\.csv$/,
+  /^75080321648_PRODAVAONICA_Polacisce_2_23000_Zadar_T002_ROBA_\d+_\d{8}_\d{4}(?:\d{2})?\.csv$/,
+  /^75080321648_PRODAVAONICA_Put_Murvice_20_23000_Zadar_T009_ROBA_\d+_\d{8}_\d{4}(?:\d{2})?\.csv$/,
+  /^75080321648_PRODAVAONICA_Setaliste_kneza_Branimira_6_23210_Biograd_na_moru_T006_ROBA_\d+_\d{8}_\d{4}(?:\d{2})?\.csv$/,
 ];
 
 export function getZagrebTimestamp(date = new Date()) {
@@ -292,11 +292,14 @@ export const STORES = [
 ];
 
 // Stari oblik: PRODAVAONICA_<adresa>_T00x_<broj>_<YYYYMMDD>_<HHMMSS>.csv
-// Novi (NN 132/2026): <OIB>_PRODAVAONICA_<adresa>_T00x_ROBA_<broj>_<YYYYMMDD>_<HHMMSS>.csv
-const PRICELIST_FILENAME_RE = /^(?:\d{11}_)?PRODAVAONICA_.+_(T\d{3})_(?:ROBA_)?(\d+)_(\d{8})_(\d{6})\.csv$/;
+// Novi (NN 132/2026): <OIB>_PRODAVAONICA_<adresa>_T00x_ROBA_<broj>_<YYYYMMDD>_<HHMM>.csv
+//   (prvi dogovor je bio <HHMMSS>, i to se prihvaća)
+const PRICELIST_FILENAME_RE = /^(?:\d{11}_)?PRODAVAONICA_.+_(T\d{3})_(?:ROBA_)?(\d+)_(\d{8})_(\d{4}(?:\d{2})?)\.csv$/;
 
 function compactToIso(date, time) {
   // "20261024", "063233" -> "2026-10-24T06:32:33" (lokalno vrijeme Zagreb)
+  // "0700" (novi oblik bez sekundi) -> "07:00:00"
+  time = time.padEnd(6, "0");
   return `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}T${time.slice(0, 2)}:${time.slice(2, 4)}:${time.slice(4, 6)}`;
 }
 
