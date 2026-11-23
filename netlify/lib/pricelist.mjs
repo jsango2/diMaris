@@ -406,12 +406,31 @@ export function buildPriceListIndex({ publicFilenames, archiveFilenames, now = n
       (a, b) => b.exportedAt.localeCompare(a.exportedAt) || b.sequence - a.sequence
     );
     const archive = all.filter((entry) => Date.parse(`${entry.exportedAt}Z`) >= cutoff - 24 * 60 * 60 * 1000);
+    const aktualniUrl = aktualniPath(store.code);
     return {
       ...store,
-      latest: all[0] || null,
+      aktualniUrl,
+      latest: all[0] ? { ...all[0], aktualniUrl } : null,
       archive,
     };
   });
+}
+
+// Stalna adresa zadnjeg cjenika poslovnice (NN 132/2026, čl. 6.2: novi cjenik na istoj
+// URL adresi). Naziv datoteke s vremenom (čl. 6.3) šalje se u Content-Disposition.
+export const aktualniPath = (storeCode) => `/cjenici/${storeCode}/aktualni.csv`;
+
+export async function readLatestCsv(storeCode, now = new Date()) {
+  if (!STORES.some((store) => store.code === storeCode)) {
+    return null;
+  }
+  const stores = await listPriceLists(now);
+  const latest = stores.find((store) => store.code === storeCode)?.latest;
+  if (!latest) {
+    return null;
+  }
+  const csv = await readPublicCsv(latest.filename);
+  return csv ? { csv, filename: latest.filename } : null;
 }
 
 export async function listPriceLists(now = new Date()) {

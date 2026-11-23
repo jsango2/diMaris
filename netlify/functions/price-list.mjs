@@ -1,4 +1,4 @@
-import { readArchiveCsv, readPublicCsv } from "../lib/pricelist.mjs";
+import { readArchiveCsv, readLatestCsv, readPublicCsv } from "../lib/pricelist.mjs";
 
 const CSV_HEADERS = {
   "Content-Type": "text/csv; charset=utf-8",
@@ -17,10 +17,18 @@ export default async function handler(request) {
   const relativePath = getRelativePriceListPath(path);
 
   let csv = null;
-  if (relativePath.startsWith("arhiva/")) {
-    const filename = relativePath.slice("arhiva/".length);
+  let filename = null;
+  const aktualni = /^(T\d{3})\/aktualni\.csv$/.exec(relativePath);
+  if (aktualni) {
+    // Stalna adresa po poslovnici: uvijek zadnji cjenik, pravi naziv u Content-Disposition.
+    const latest = await readLatestCsv(aktualni[1]);
+    csv = latest?.csv ?? null;
+    filename = latest?.filename ?? null;
+  } else if (relativePath.startsWith("arhiva/")) {
+    filename = relativePath.slice("arhiva/".length);
     csv = await readArchiveCsv(filename);
   } else if (/^[a-zA-Z0-9][a-zA-Z0-9._+-]*\.csv$/.test(relativePath)) {
+    filename = relativePath;
     csv = await readPublicCsv(relativePath);
   }
 
@@ -36,7 +44,7 @@ export default async function handler(request) {
 
   return new Response(request.method === "HEAD" ? null : csv, {
     status: 200,
-    headers: CSV_HEADERS,
+    headers: { ...CSV_HEADERS, "Content-Disposition": `inline; filename="${filename}"` },
   });
 }
 
