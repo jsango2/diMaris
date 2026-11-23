@@ -41,7 +41,7 @@ function priceListEntries(stores) {
   for (const entry of latest) {
     const lastmod = entry.publishedAt || entry.exportedAt;
     entries.push(
-      `  <url>\n    <loc>${escapeXml(absolute(entry.publicUrl))}</loc>${lastmod ? `\n    <lastmod>${escapeXml(lastmod)}</lastmod>` : ""}\n    <changefreq>daily</changefreq>\n  </url>`
+      `  <url>\n    <loc>${escapeXml(absolute(entry.aktualniUrl))}</loc>${lastmod ? `\n    <lastmod>${escapeXml(lastmod)}</lastmod>` : ""}\n    <changefreq>daily</changefreq>\n  </url>`
     );
   }
   return entries;

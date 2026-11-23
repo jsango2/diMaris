@@ -24,8 +24,8 @@ function formatDateTime(iso) {
 function renderStore(store) {
   const { code, name, address, latest, archive } = store;
   const latestHtml = latest
-    ? `<p>Aktualni cjenik: <a href="${escapeHtml(latest.publicUrl)}" download>${escapeHtml(latest.filename)}</a>
-        <br><small>Izvoz: ${escapeHtml(formatDateTime(latest.exportedAt))}${
+    ? `<p>Aktualni cjenik: <a href="${escapeHtml(latest.aktualniUrl)}" download="${escapeHtml(latest.filename)}">${escapeHtml(latest.aktualniUrl)}</a>
+        <br><small>Datoteka: ${escapeHtml(latest.filename)} · izvoz: ${escapeHtml(formatDateTime(latest.exportedAt))}${
           latest.publishedAt ? ` · objava: ${escapeHtml(formatDateTime(latest.publishedAt))}` : ""
         }</small></p>`
     : `<p>Cjenik još nije objavljen.</p>`;
